@@ -1,0 +1,12 @@
+student_id,name,age,grade,subject,city,attendance_percent
+1,Alice,20,4.8,Math,Moscow,95
+2,Bob,21,3.5,Physics,St. Petersburg,88
+3,Charlie,19,4.2,Math,Kazan,92
+4,Diana,22,3.9,Chemistry,Moscow,85
+5,Ethan,20,4.5,Math,Novosibirsk,90
+6,Fiona,21,4.0,Physics,Ekaterinburg,93
+7,George,19,3.7,Chemistry,Kazan,87
+8,Hannah,22,4.6,Math,Moscow,96
+9,Ivan,20,3.8,Physics,St. Petersburg,89
+10,Julia,21,4.3,Chemistry,Novosibirsk,94
+11,Melina,98,4.5,,Moscow,87

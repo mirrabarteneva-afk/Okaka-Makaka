@@ -1,0 +1,230 @@
+/* ================= Общие ================= */
+QWidget {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-family: "Segoe UI", "Arial";
+    font-size: 14px;
+}
+
+QToolTip {
+    background-color: #2b2b2b;
+    color: #FFD700;
+    border: 1px solid #FFD700;
+    border-radius: 6px;
+    padding: 6px;
+}
+
+/* ================= Заголовок и лого ================= */
+#title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFFFFF;
+    background: transparent;
+    letter-spacing: 1px;
+}
+
+#logo_avatar {
+    border-radius: 12px;
+    background: transparent;
+}
+
+/* ================= Кнопки ================= */
+QPushButton {
+    color: #FFFFFF;
+    font-weight: 600;
+    padding: 9px 16px;
+    border: 1px solid #4a4a4a;
+    border-radius: 10px;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #2e2e2e, stop:1 #1a1a1a);
+}
+
+QPushButton:hover {
+    border: 1px solid #FFD700;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #4a4100, stop:1 #2b2700);
+    color: #FFD700;
+}
+
+QPushButton:pressed {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFD700, stop:1 #D4AF37);
+    color: #121212;
+    border: 1px solid #FFD700;
+}
+
+/* Главная кнопка */
+#button_start {
+    font-size: 15px;
+    font-weight: 700;
+    padding: 11px 18px;
+    border: none;
+    border-radius: 12px;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 #FFD700, stop:1 #B8860B);
+    color: #121212;
+}
+
+#button_start:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 #FFEA70, stop:1 #FFD700);
+}
+
+#button_start:pressed {
+    background: #B8860B;
+    color: #FFFFFF;
+}
+
+/* Кнопка-крестик очистки */
+#clear_btn {
+    border: none;
+    border-radius: 20px;
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #2e2e2e, stop:1 #1a1a1a);
+}
+
+#clear_btn:hover {
+    background: #4a4100;
+}
+
+/* ================= Поля ввода ================= */
+QLineEdit {
+    color: #FFFFFF;
+    background-color: #1e1e1e;
+    border: 2px solid #3a3a3a;
+    border-radius: 10px;
+    padding: 8px 12px;
+    selection-background-color: #FFD700;
+    selection-color: #121212;
+}
+
+QLineEdit:focus {
+    border: 2px solid #FFD700;
+    background-color: #252525;
+}
+
+QLineEdit::placeholder {
+    color: #8a8a8a;
+}
+
+/* ================= Комбобоксы ================= */
+QComboBox {
+    color: #FFFFFF;
+    background-color: #1e1e1e;
+    border: 2px solid #3a3a3a;
+    border-radius: 10px;
+    padding: 6px 12px;
+}
+
+QComboBox:hover, QComboBox:focus {
+    border: 2px solid #FFD700;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 26px;
+}
+
+QComboBox::down-arrow {
+    image: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #FFD700;
+    margin-right: 8px;
+}
+
+QComboBox QAbstractItemView {
+    background-color: #1e1e1e;
+    color: #FFFFFF;
+    border: 1px solid #FFD700;
+    border-radius: 8px;
+    selection-background-color: #B8860B;
+    selection-color: #FFFFFF;
+    outline: none;
+}
+
+/* ================= Чекбоксы ================= */
+QCheckBox {
+    color: #FFFFFF;
+    spacing: 8px;
+    padding: 3px;
+    background: transparent;
+}
+
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #4a4a4a;
+    border-radius: 6px;
+    background-color: #1e1e1e;
+}
+
+QCheckBox::indicator:hover {
+    border: 2px solid #FFD700;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #FFD700;
+    border: 2px solid #FFD700;
+    image: url(assets/check.png);  /* при желании подложите свою иконку галочки */
+}
+
+/* ================= Скролл-область ================= */
+QScrollArea {
+    background-color: #161616;
+    border: 1px solid #2e2e2e;
+    border-radius: 12px;
+}
+
+QScrollArea > QWidget > QWidget {
+    background-color: #161616;
+}
+
+/* Ползунок скролла */
+QScrollBar:vertical {
+    background: #161616;
+    width: 10px;
+    margin: 4px 3px 4px 3px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 #FFD700, stop:1 #B8860B);
+    border-radius: 5px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #FFEA70;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+/* ================= Метки ================= */
+QLabel {
+    color: #FFFFFF;
+    background: transparent;
+}
+
+/* Заголовки секций «Сортировка» и «Пресеты» */
+QLabel[text="Сортировка"], QLabel[text="Пресеты"] {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFD700;
+}
