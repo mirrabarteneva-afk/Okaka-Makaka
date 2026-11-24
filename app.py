@@ -42,7 +42,7 @@ class Okaka_makaka(QMainWindow):
 
         self.table_panel = Main_panel(assets_path=self.assets_path)
         self.left_panel = Leftpanel(assets_path=self.assets_path, data_view=self.table_panel)
-        self.right_panel = Olama_panel()
+        self.right_panel = Olama_panel(left_panel=self.left_panel, data_view=self.table_panel)
         
         
         left_layout = self.left_panel.layout()

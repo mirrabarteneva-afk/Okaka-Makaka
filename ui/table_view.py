@@ -4,7 +4,7 @@ import pyqtgraph as pg
 
 from moduls.max_value import max_value
 from moduls.min_value import min_value
-from moduls.sr_values import sr_valye
+from moduls.sr_values import sr_value
 
 from PyQt6.QtWidgets import (
     QWidget,
@@ -175,65 +175,81 @@ class Main_panel(QWidget):
             ch.toggled.connect(self.sort)
             self.count_menu.addAction(ch)
 
-    def sort(self):
-        action = self.sender()
-        action.blockSignals(True)
-        menu = action.parent()
-        name = action.text()
+    def data_sortes(self, col):
         num_sorted = []
         all_values = []
 
         headers = [self.table_result.horizontalHeaderItem(i).text() for i in range(self.table_result.columnCount())]
-
-        if headers:
-            col = headers.index(name)
-
-            for row in range(self.table_result.rowCount()):
-                item = self.table_result.item(row, col)
-                if item is not None:
-                    text = item.text()
-                    all_values.append(text)
-                    try:
-                        num = float(item.text())
-                        num_sorted.append(num)
-
-                    except ValueError:
-                        pass       
-            try:
-                if menu is self.max_menu:
-                    max_num = max_value(num_sorted)
-                    self.result.append(f'Максимальное значение в колонке {name} - {max_num:.2f}')
+        if col:
+            column = headers.index(col)
+            print(column)
             
-                if menu is self.min_menu:
-                    min_num = min_value(num_sorted)
-                    self.result.append(f'Минимальное значение в колонке {name} - {min_num:.2f}')   
-
-                if menu is self.sr_menu:
-                    if num_sorted:
-                        sr_number = sr_valye(num_sorted)
-                        self.result.append(f'Среднее значение в колонке {name} - {sr_number:.2f}')
-                    else:
-                        raise ValueError
-
-                if menu is self.count_menu:
-                    number = len(all_values)
-                    self.result.append(f'Количество элементов в колонке {name} - {number}')
-
-            except ValueError:
-                if menu is self.max_menu:
-                    max_num = max([len(a) for a in all_values])
-                    self.result.append(f'Максимальное значение в колонке {name} - {max_num}')
-
-                if menu is self.min_menu:
-                    min_num = min([len(a) for a in all_values])
-                    self.result.append(f'Минимальное значение в колонке {name} - {min_num}')
-
-                if menu is self.sr_menu:
-                    num_sorted = [len(atribut) for atribut in all_values]
-                    sr_number = sum(num_sorted) / len(num_sorted)
-                    self.result.append(f'Среднея длина значения в колонке {name} - {sr_number:.2f}')
         else:
             return
+        
+        for row in range(self.table_result.rowCount()):
+            item = self.table_result.item(row, column)
+            if item is not None:
+                text = item.text()
+                all_values.append(text)
+                try:
+                    num = float(item.text())
+                    num_sorted.append(num)
+
+                except ValueError:
+                    pass   
+
+        return num_sorted, all_values
+
+    def sort(self, menu_column=None, column=None):
+        if column is None:
+            action = self.sender()
+            action.blockSignals(True)
+            menu = action.parent()
+            name = action.text()
+
+            num_sorted, all_values = self.data_sortes(name)
+
+        else:
+            menu = menu_column
+            num_sorted, all_values = self.data_sortes(column)
+            print(num_sorted, all_values)
+            name = column
+            
+        try:
+            if menu is self.max_menu or menu == 'max':
+                max_num = max_value(num_sorted)
+                self.result.append(f'Максимальное значение в колонке {name} - {max_num:.2f}')
+            
+            if menu is self.min_menu or menu == 'min':
+                min_num = min_value(num_sorted)
+                self.result.append(f'Минимальное значение в колонке {name} - {min_num:.2f}')   
+
+            if menu is self.sr_menu or menu == 'sr':
+                if num_sorted:
+                    sr_number = sr_value(num_sorted)
+                    self.result.append(f'Среднее значение в колонке {name} - {sr_number:.2f}')
+                else:
+                    raise ValueError
+
+            if menu is self.count_menu or menu == 'len':
+                number = len(all_values)
+                self.result.append(f'Количество элементов в колонке {name} - {number}')
+
+        except TypeError:
+            if menu is self.max_menu or menu == 'max':
+                max_num = max([len(a) for a in all_values])
+                self.result.append(f'Максимальное значение в колонке {name} - {name}')
+
+            if menu is self.min_menu or menu == 'min':
+                min_num = min([len(a) for a in all_values])
+                self.result.append(f'Минимальное значение в колонке {name} - {name}')
+
+            if menu is self.sr_menu or menu == 'sr':
+                num_sorted = [len(atribut) for atribut in all_values]
+                sr_number = sum(num_sorted) / len(num_sorted)
+                self.result.append(f'Среднея длина значения в колонке {name} - {name}')
+
 
     def result_clear(self):
         self.result.clear()

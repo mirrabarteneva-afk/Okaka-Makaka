@@ -5,6 +5,7 @@ from moduls.open_csv import get_headers
 from moduls.open_db import get_headers_column
 from moduls.table_create_csv import csv_table_create
 from moduls.table_create_db import db_table_create
+
 from ui.table_view import Main_panel
 from PyQt6.QtWidgets import (
     QWidget,
@@ -29,6 +30,7 @@ class Leftpanel(QWidget):
         self.status = True
         self.conditions = []
         self.headers = []
+        self.rows = []
         self.checkboxes = {}
         self.count = 1
         self.path = ''
@@ -216,24 +218,29 @@ class Leftpanel(QWidget):
             row_widget = QWidget()
             row_layout = QHBoxLayout()
 
-            self.logic_combo = QComboBox()
-            self.logic_combo.addItems(['AND', 'OR'])
-            row_layout.addWidget(self.logic_combo)
+            logic_combo = QComboBox()
+            logic_combo.addItems(['AND', 'OR'])
+            row_layout.addWidget(logic_combo)
 
-            self.column_combo = QComboBox()
-            self.column_combo.addItems(headers)
-            row_layout.addWidget(self.column_combo)
+            column_combo = QComboBox()
+            column_combo.addItems(headers)
+            row_layout.addWidget(column_combo)
 
-            self.operator_combo = QComboBox()
-            self.operator_combo.addItems(['=', '<', '>', '<=', '>=', 'Диапазон', 'В', 'В тексте', 'Пусто', 'Не пусто'])
-            row_layout.addWidget(self.operator_combo)
+            operator_combo = QComboBox()
+            operator_combo.addItems(['=', '<', '>', '<=', '>=', 'Диапазон', 'В', 'В тексте', 'Пусто', 'Не пусто'])
+            row_layout.addWidget(operator_combo)
 
-            self.input_edit = QLineEdit()
-            row_layout.addWidget(self.input_edit)
+            input_edit = QLineEdit()
+            row_layout.addWidget(input_edit)
 
             button_delete = QPushButton('-', self)
-        
+
+            controls = (logic_combo, column_combo, operator_combo, input_edit)
+
             def row_clear():
+                if controls in self.rows:
+                    self.rows.remove(controls)
+
                 while row_layout.count():
                     item = row_layout.takeAt(0)
                     if item.widget():
@@ -247,6 +254,7 @@ class Leftpanel(QWidget):
 
             row_widget.setLayout(row_layout)
             self.condition_data.addWidget(row_widget)
+            self.rows.append(controls)
 
     def clear(self):
         self.get_delim.setText('')
@@ -266,46 +274,43 @@ class Leftpanel(QWidget):
                 item.widget().deleteLater()
 
     def start(self):
-        self.conditions.clear()
+        conditions =[]
         check = [name for name, active in self.checkboxes.items() if active.isChecked()]
         delim = self.get_delim.text()
         path = self.path
 
         if self.columns_change_2.currentText() != 'Нет':
-            self.conditions = [
+            conditions = [
                 (self.columns_change_2.currentText(),
                 self.change_operations.currentText(),
                 self.input_parametr.text())
             ]
 
-        try:
-            logic = self.logic_combo.currentText()
-            col = self.column_combo.currentText()
-            op = self.operator_combo.currentText()
-            row = self.input_edit.text()
+        for logic_combo, column_combo, operator_combo, input_edit in self.rows:
+            conditions.append(logic_combo.currentText())
+            conditions.append(
+                (column_combo.currentText(), operator_combo.currentText(), input_edit.text())
+            )
 
-            self.conditions.append(logic)
-            self.conditions.append((col, op, row))
-
-        except AttributeError:
-            pass
-
-        try:
-            if path.suffix.lower() == '.csv':
-                try:
-                    self.errors_message.clear()
-                    headers, row = csv_table_create(check, path, delim, self.conditions)
-                    self.data_view.draw_table(headers, row)
-                    
-                    
-                except ValueError:
-                    self.errors_message.setText('Проблемы с типизацией!')
-
-                except TypeError:
-                    self.errors_message.setText('Проверьте, что вы корректно ввели условие')
-
-            if path.suffix.lower() == '.db':
-                headers, row = db_table_create(check, path, delim)
+        if path.suffix.lower() == '.csv':
+            try:
+                self.errors_message.clear()
+                headers, row = csv_table_create(check, path, delim, conditions)
                 self.data_view.draw_table(headers, row)
-        except AttributeError:
-            return
+                    
+            except ValueError:
+                self.errors_message.setText('Проблемы с типизацией!')
+                return
+
+            except TypeError:
+                self.errors_message.setText('Проверьте, что вы корректно ввели условие')
+                return
+
+        if path.suffix.lower() == '.db':
+            headers, row = db_table_create(check, path, delim)
+            self.data_view.draw_table(headers, row)
+
+
+    def get_headers(self):
+        delim = self.get_delim.text()
+        return (self.headers, self.path, delim)
