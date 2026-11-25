@@ -5,6 +5,7 @@ import pyqtgraph as pg
 from moduls.max_value import max_value
 from moduls.min_value import min_value
 from moduls.sr_values import sr_value
+from moduls.create_document import create_file
 
 from PyQt6.QtWidgets import (
     QWidget,
@@ -67,6 +68,7 @@ class Main_panel(QWidget):
         save_layout.addWidget(self.save_table)
 
         self.save_all = QPushButton('Сохранить всё как ...')
+        self.save_all.clicked.connect(self.save_document)
         save_layout.addWidget(self.save_all)
     
         self.clear_button = QPushButton()
@@ -145,6 +147,8 @@ class Main_panel(QWidget):
     def filters_table(self, header):
         self.max_menu.clear()
         self.min_menu.clear()
+        self.sr_menu.clear()
+        self.count_menu.clear()
 
         for ch in header:
             ch = QAction(ch, self.max_menu)
@@ -239,16 +243,16 @@ class Main_panel(QWidget):
         except TypeError:
             if menu is self.max_menu or menu == 'max':
                 max_num = max([len(a) for a in all_values])
-                self.result.append(f'Максимальное значение в колонке {name} - {name}')
+                self.result.append(f'Максимальное значение в колонке {name} - {max_num}')
 
             if menu is self.min_menu or menu == 'min':
                 min_num = min([len(a) for a in all_values])
-                self.result.append(f'Минимальное значение в колонке {name} - {name}')
+                self.result.append(f'Минимальное значение в колонке {name} - {min_num}')
 
             if menu is self.sr_menu or menu == 'sr':
                 num_sorted = [len(atribut) for atribut in all_values]
                 sr_number = sum(num_sorted) / len(num_sorted)
-                self.result.append(f'Среднея длина значения в колонке {name} - {name}')
+                self.result.append(f'Среднея длина значения в колонке {name} - {sr_number}')
 
 
     def result_clear(self):
@@ -282,8 +286,18 @@ class Main_panel(QWidget):
         )
 
 
-    def save_all(self):
-        pass
+    def save_document(self):
+        file, _ = QFileDialog.getSaveFileName(
+            self,
+            'Сохранить',
+            '',
+            'DOCX (*.docx)'
+        )
+
+        text = self.result.toPlainText()
+        table = self.table_result
+
+        create_file(table, path_for_document=file, text=text)
 
     def draw_graph(self):
         header = [name for name, ch in self.checkboxes if ch.isChecked()]

@@ -4,7 +4,7 @@ from pathlib import Path
 from moduls.open_csv import get_headers
 from moduls.open_db import get_headers_column
 from moduls.table_create_csv import csv_table_create
-from moduls.table_create_db import db_table_create
+from moduls.table_create_db import sql_table_create
 
 from ui.table_view import Main_panel
 from PyQt6.QtWidgets import (
@@ -307,7 +307,7 @@ class Leftpanel(QWidget):
                 return
 
         if path.suffix.lower() == '.db':
-            headers, row = db_table_create(check, path, delim)
+            headers, row = sql_table_create(check, path, delim, conditions)
             self.data_view.draw_table(headers, row)
 
 
