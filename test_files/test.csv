@@ -1,12 +1,21 @@
-student_id,name,age,grade,subject,city,attendance_percent
-1,Alice,20,4.8,Math,Moscow,95
-2,Bob,21,3.5,Physics,St. Petersburg,88
-3,Charlie,19,4.2,Math,Kazan,92
-4,Diana,22,3.9,Chemistry,Moscow,85
-5,Ethan,20,4.5,Math,Novosibirsk,90
-6,Fiona,21,4.0,Physics,Ekaterinburg,93
-7,George,19,3.7,Chemistry,Kazan,87
-8,Hannah,22,4.6,Math,Moscow,96
-9,Ivan,20,3.8,Physics,St. Petersburg,89
-10,Julia,21,4.3,Chemistry,Novosibirsk,94
-11,Melina,98,4.5,,Moscow,87
+name,age,grade,hours,sleep
+Alice,20,4.8,6.5,7.0
+Bob,21,3.5,2.0,8.5
+Charlie,19,4.2,5.0,7.5
+Diana,22,3.9,3.5,6.0
+Ethan,20,4.5,7.0,6.5
+Fiona,21,4.0,4.0,7.0
+George,19,3.7,2.5,9.0
+Hannah,22,4.6,8.0,6.0
+Ivan,20,3.8,3.0,8.0
+Julia,21,4.3,6.0,7.5
+Melina,17,4.5,5.5,8.0
+Oscar,18,3.4,1.5,9.5
+Petra,23,4.1,4.5,6.5
+Quinn,20,3.6,2.0,8.5
+Rita,19,4.7,7.5,6.0
+Semyon,22,3.3,1.0,9.0
+Tatiana,21,4.4,6.5,7.0
+Umar,18,3.9,3.5,8.0
+Vera,20,4.9,8.5,5.5
+Wendy,19,3.5,2.5,9.0
