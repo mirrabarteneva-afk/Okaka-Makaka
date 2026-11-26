@@ -214,6 +214,7 @@ class Leftpanel(QWidget):
 
 
     def add_condition_func(self):
+            self.columns_change_2.clear()
             headers = [self.columns_change_2.itemText(i) for i in range(self.columns_change_2.count())]
             row_widget = QWidget()
             row_layout = QHBoxLayout()
@@ -296,7 +297,8 @@ class Leftpanel(QWidget):
             try:
                 self.errors_message.clear()
                 headers, row = csv_table_create(check, path, delim, conditions)
-                self.data_view.draw_table(headers, row)
+                print(headers, row)
+                self.data_view.draw_table(headers, row, delim)
                     
             except ValueError:
                 self.errors_message.setText('Проблемы с типизацией!')
@@ -306,9 +308,9 @@ class Leftpanel(QWidget):
                 self.errors_message.setText('Проверьте, что вы корректно ввели условие')
                 return
 
-        if path.suffix.lower() == '.db':
+        if path.suffix.lower() == '.db' or path.suffix.lower() == '.sqlite':
             headers, row = sql_table_create(check, path, delim, conditions)
-            self.data_view.draw_table(headers, row)
+            self.data_view.draw_table(headers, row, delim)
 
 
     def get_headers(self):

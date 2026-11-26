@@ -2,7 +2,9 @@ from PyQt6.QtGui import QAction
 from itertools import chain, zip_longest
 from moduls.ollama import script_run
 from moduls.table_create_csv import csv_table_create
+from moduls.table_create_db import sql_table_create
 from ui.table_view import Main_panel
+from pathlib import Path
 from PyQt6.QtWidgets import (
     QWidget,
     QVBoxLayout,
@@ -144,7 +146,7 @@ class Olama_panel(QWidget):
                 values = list(zip(it, it, it))
 
                 parse = [x for x in chain.from_iterable(zip_longest(cond, values)) if x is not None]
-                
+
             else:
                 parse = [response]
 
@@ -154,12 +156,27 @@ class Olama_panel(QWidget):
             self.data_view.sort(menu_column=response[0], column=response[1])
 
         if parse:
-            headers, row  = csv_table_create(columns=self.columns[0], path=self.columns[1], delim=self.columns[2], conditions=parse)
-            self.data_view.draw_table(headers, row)
+            path = Path(self.columns[1])
+            suffix = path.suffix.lower()
 
-        #action_ok = self.menu.addAction('Ok')
-        #action_ok.triggered.connect(self.)
+            if suffix in ('.db', '.sqlite'):
+                headers, row = sql_table_create(
+                    columns=self.columns[0],
+                    db_path=path,
+                    table=self.columns[2],
+                    conditions=parse,
+                )
+            else:
+                headers, row = csv_table_create(
+                    columns=self.columns[0],
+                    path=self.columns[1],
+                    delim=self.columns[2],
+                    conditions=parse,
+                )
 
-        #btn = self.sender()
-        #rect = self.toolBar().connect(self.c)
-        #self.menu.exec(self.mapToGlobal())
+            if headers is None or row is None:
+                self._add_message('Не удалось применить условия к данным', is_user=False)
+                return
+
+            self.data_view.draw_table(headers, row, delim=self.columns[2])
+
